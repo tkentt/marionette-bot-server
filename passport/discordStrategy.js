@@ -1,11 +1,12 @@
-// const passport = require('passport');
-// const DiscordStrategy = require('passport-discord').Strategy;
-// const { clientID, clientSecret } = require('./config');
+const DiscordStrategy = require('passport-discord').Strategy;
+const { clientID, clientSecret } = require('../config');
 
-// passport.use(new DiscordStrategy({
-//   callbackURL: '/auth/discord/redirect',
-//   clientID,
-//   clientSecret
-// }, (accessToken, refreshToken, profile, done) => {
+const discordStrategy = new DiscordStrategy({
+  callbackURL: '/auth/discord/redirect',
+  clientID,
+  clientSecret
+}, () => {
+  console.log('help');
+});
 
-// }));
+module.exports = discordStrategy;
