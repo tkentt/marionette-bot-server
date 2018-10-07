@@ -5,8 +5,9 @@ const discordStrategy = new DiscordStrategy({
   callbackURL: '/auth/discord/redirect',
   clientID,
   clientSecret
-}, () => {
-  console.log('help');
+}, (accessToken, refreshToken, profile, done) => {
+  console.log(profile.id);
+  done();
 });
 
 module.exports = discordStrategy;
