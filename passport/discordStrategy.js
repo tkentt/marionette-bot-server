@@ -20,7 +20,6 @@ const discordStrategy = new DiscordStrategy({
     })
     .then(user => console.log(user))
     .catch(err => done(err));
-  console.log(profile.id);
   done();
 });
 

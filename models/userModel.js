@@ -6,4 +6,13 @@ const userSchema = new Schema({
   discordId: String
 });
 
+userSchema.set('toObject', {
+  virtuals: true,
+  versionKey: false,
+  transform: (doc, ret) => {
+    delete ret._id;
+    delete ret.__v;
+  }
+});
+
 module.exports = mongoose.model('User', userSchema);
