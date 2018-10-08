@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
+// TODO: Figure out what refresh does
 const refresh = require('passport-oauth2-refresh');
 
 const { DATABASE_URL, PORT } = require('./config');
@@ -14,6 +15,7 @@ const app = express();
 // Passport stuff
 app.use(passport.initialize());
 passport.use(discordStrategy);
+// TODO: Figure out what refresh does
 refresh.use(discordStrategy);
 
 // Log all requests

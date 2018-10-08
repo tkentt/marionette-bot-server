@@ -11,7 +11,9 @@ router.get(
   passport.authenticate('discord'),
   (req, res) => {
     // TODO: Send user JWT
-    res.redirect('/');
+    // temp code to check if it is returning the user
+    res.json(req.user.serialize());
+    // res.redirect('/');
   }
 );
 

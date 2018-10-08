@@ -17,6 +17,7 @@ const discordStrategy = new DiscordStrategy({
   clientID,
   clientSecret
 }, (accessToken, refreshToken, profile, done) => {
+  // TODO: Store tokens somewhere?
   return User.findOne({ discordId: profile.id })
     .then(user => {
       if (user) {
