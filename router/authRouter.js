@@ -7,7 +7,7 @@ router.get('/discord', passport.authenticate('discord', {
 }));
 
 router.get('/discord/redirect', passport.authenticate('discord'), (req, res) => {
-  res.send('you reached the callback');
+  res.json(req.user);
 });
 
 module.exports = router;

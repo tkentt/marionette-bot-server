@@ -17,7 +17,7 @@ const discordStrategy = new DiscordStrategy({
   clientID,
   clientSecret
 }, (accessToken, refreshToken, profile, done) => {
-  User.findOne({ discordId: profile.id })
+  return User.findOne({ discordId: profile.id })
     .then(user => {
       if (user) {
         return user;
@@ -30,7 +30,6 @@ const discordStrategy = new DiscordStrategy({
     })
     .then(user => done(null, user))
     .catch(err => done(err));
-  done();
 });
 
 module.exports = discordStrategy;
