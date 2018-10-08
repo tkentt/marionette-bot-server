@@ -4,21 +4,15 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
 const refresh = require('passport-oauth2-refresh');
-const cookieSession = require('cookie-session');
 
-const { DATABASE_URL, PORT, SECRET } = require('./config');
+const { DATABASE_URL, PORT } = require('./config');
 const authRouter = require('./router/authRouter');
 const discordStrategy = require('./passport/discordStrategy');
 
 const app = express();
 
-app.use(cookieSession({
-  maxAge: 24 * 60 * 60 * 1000,
-  keys: [SECRET]
-}));
-
+// Passport stuff
 app.use(passport.initialize());
-app.use(passport.session());
 passport.use(discordStrategy);
 refresh.use(discordStrategy);
 
