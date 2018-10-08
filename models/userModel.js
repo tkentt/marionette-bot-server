@@ -3,16 +3,17 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   username: String,
+  email: String,
   discordId: String
 });
 
-userSchema.set('toObject', {
-  virtuals: true,
-  versionKey: false,
-  transform: (doc, ret) => {
-    delete ret._id;
-    delete ret.__v;
-  }
-});
+userSchema.methods.serialize = function() {
+  return {
+    id: this.id,
+    username: this.username,
+    email: this.email,
+    discordId: this.discordId
+  };
+};
 
 module.exports = mongoose.model('User', userSchema);

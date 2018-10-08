@@ -18,6 +18,7 @@ const discordStrategy = new DiscordStrategy({
   clientSecret
 }, (accessToken, refreshToken, profile, done) => {
   console.log(accessToken);
+  console.log(profile);
   return User.findOne({ discordId: profile.id })
     .then(user => {
       if (user) {
@@ -25,6 +26,7 @@ const discordStrategy = new DiscordStrategy({
       } else {
         return User.create({
           username: profile.username,
+          email: profile.email,
           discordId: profile.id
         });
       }

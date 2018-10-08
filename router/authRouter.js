@@ -10,7 +10,8 @@ router.get(
   '/discord/redirect',
   passport.authenticate('discord'),
   (req, res) => {
-    res.json(req.user.username);
+    // TODO: Send user JWT
+    res.json(req.user.serialize());
   }
 );
 
