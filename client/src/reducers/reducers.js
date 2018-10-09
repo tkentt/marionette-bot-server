@@ -10,6 +10,7 @@ const initialState = {
 
 export const reducer = (state=initialState, action) => {
   if (action.type === LOG_IN_REQUEST) {
+    console.log('ran');
     return Object.assign({}, state, {
       loading: true
     })
