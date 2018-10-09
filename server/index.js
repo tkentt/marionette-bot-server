@@ -22,7 +22,7 @@ refresh.use(discordStrategy);
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'));
 
 // Create a static web server
-app.use(express.static('public'));
+// app.use(express.static('public'));
 
 // Routers
 app.use('/auth', authRouter);
