@@ -1,5 +1,14 @@
 const router = require('express').Router();
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET, JWT_EXPIRY } = require('../config');
+
+const createAuthToken = function(user) {
+  return jwt.sign({ user }, JWT_SECRET, {
+    subject: user.username,
+    expiresIn: JWT_EXPIRY
+  });
+};
 
 // auth with discord
 router.get('/discord', passport.authenticate('discord', {
@@ -10,8 +19,9 @@ router.get(
   '/discord/redirect',
   passport.authenticate('discord'),
   (req, res) => {
-    console.log(req.query);
-    res.redirect('http://localhost:3000');
+    const token = createAuthToken(req.user.serialize())
+    console.log(req.user.id);
+    res.redirect(`http://localhost:3000?token=${token}`);
   }
 );
 
