@@ -5,7 +5,7 @@ import {
 } from '../actions/actions';
 
 const initialState = {
-  loading: false
+  authToken: ''
 };
 
 export const reducer = (state=initialState, action) => {
