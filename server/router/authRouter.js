@@ -10,8 +10,8 @@ router.get(
   '/discord/redirect',
   passport.authenticate('discord'),
   (req, res) => {
-    console.log(req.user);
-    res.send('callback');
+    console.log(req.query);
+    res.redirect('http://localhost:3000');
   }
 );
 

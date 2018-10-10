@@ -1,25 +1,24 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { logIn } from './actions/actions';
+import {
+  connect
+} from 'react-redux';
+import {
+  authenticate
+} from './actions/actions';
 
 export class App extends React.Component {
-  onLogIn(e) {
-    e.preventDefault();
-    console.log('running');
-    this.props.dispatch(logIn());
+  componentDidMount() {
+    this.props.dispatch(authenticate())
   }
 
   render() {
-    return (
-      <a href="#" onClick={e => this.onLogIn(e)}>Log in with discord</a>
+    return ( 
+      <a href="http://localhost:8080/auth/discord"> Log in with discord </a>
     )
   }
-} 
+}
 
-const mapStateToProps = state => ({
-  characters: state.characters,
-  loading: state.loading,
-  error: state.error
-});
+// const mapStateToProps = state => ({
+// });
 
 export default connect()(App);
