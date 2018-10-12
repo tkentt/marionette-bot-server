@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+const cors = require('cors');
 const Discord = require('discord.js');
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
@@ -21,6 +22,9 @@ const Channel = require('./models/channelModel');
 const DiscordUser = require('./models/discordUserModel');
 
 const app = express();
+
+// Use cors
+app.use(cors());
 
 // Passport stuff
 app.use(passport.initialize());

@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/kenttoku/dw-server#readme",
   "dependencies": {
+    "cors": "^2.8.4",
     "discord.js": "^11.4.2",
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
