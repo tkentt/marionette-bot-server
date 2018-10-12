@@ -1,19 +1,32 @@
 const Guild = require('../models/guildModel');
 const Channel = require('../models/channelModel');
-const User = require('../models/userModel');
+const DiscordUser = require('../models/discordUserModel');
 
 const seedDatabase = (client) => {
   Promise.all([
+    Guild.createIndexes(),
     insertGuilds(client.guilds.array()),
-    insertChannels(client.channels.array())
+    Channel.createIndexes(),
+    insertChannels(client.channels.array()),
+    DiscordUser.createIndexes(),
+    insertDiscordUsers(client.users.array())
   ]);
 };
 
 const insertGuilds = guilds => {
-  const newGuilds = guilds.map(guild => ({
-    id: guild.id,
-    name: guild.name
-  }));
+  const newGuilds = guilds.map(guild => {
+    const channels = guild.channels.array()
+      .filter(channel => channel.type === 'text')
+      .map(channel => channel.id);
+    console.log(channels);
+    return {
+      id: guild.id,
+      name: guild.name,
+      channels: guild.channels.array()
+        .filter(channel => channel.type === 'text')
+        .map(channel => channel.id)
+    };
+  });
   return Guild.insertMany(newGuilds);
 };
 
@@ -27,12 +40,12 @@ const insertChannels = channels => {
   return Channel.insertMany(newChannels);
 };
 
-const insertUsers = users => {
-  const newUsers = users.map(user => ({
-    id: user.id,
-    name: user.name
+const insertDiscordUsers = discordUsers => {
+  const newDiscordUsers = discordUsers.map(discordUser => ({
+    id: discordUser.id,
+    name: discordUser.username
   }));
-  return User.isertMany(newUsers);
+  return DiscordUser.insertMany(newDiscordUsers);
 };
 
 module.exports = {

@@ -18,6 +18,7 @@ const client = new Discord.Client();
 
 const Guild = require('./models/guildModel');
 const Channel = require('./models/channelModel');
+const DiscordUser = require('./models/discordUserModel');
 
 const app = express();
 
@@ -57,7 +58,8 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
   Promise.all([
     Guild.collection.drop(),
-    Channel.collection.drop()
+    Channel.collection.drop(),
+    DiscordUser.collection.drop()
   ])
     .then(seedDatabase(client))
     .catch(err => console.log(err));
