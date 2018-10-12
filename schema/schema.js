@@ -1,6 +1,7 @@
 const graphql = require('graphql');
 const Guild = require('../models/guildModel');
 const Channel = require('../models/channelModel');
+const DiscordUser = require('../models/discordUserModel');
 
 const {
   GraphQLID,
@@ -17,8 +18,8 @@ const GuildType = new GraphQLObjectType({
     name: { type: GraphQLString },
     channels: {
       type: new GraphQLList(ChannelType),
-      resolve(parent, args) {
-        return Channel.find()
+      resolve(parent) {
+        return Channel.find().sort('name')
           .then(channels => {
             return channels.filter(channel => {
               return parent.channels.includes(channel.id);
@@ -36,10 +37,18 @@ const ChannelType = new GraphQLObjectType({
     name: { type: GraphQLString },
     guild: {
       type: GuildType,
-      resolve(parent, args) {
+      resolve(parent) {
         return Guild.findOne({ channels: parent.id });
       }
     }
+  })
+});
+
+const DiscordUserType = new GraphQLObjectType({
+  name: 'DiscordUser',
+  fields: () => ({
+    id: { type: GraphQLID },
+    name: { type: GraphQLString }
   })
 });
 
@@ -54,11 +63,11 @@ const RootQuery = new GraphQLObjectType({
         return Guild.findOne({ id: args.id });
       }
     },
-    // Find all Guild using the id
+    // Find all Guilds
     guilds: {
       type: new GraphQLList(GuildType),
-      resolve(parent, args) {
-        return Guild.find();
+      resolve() {
+        return Guild.find().sort('name');
       }
     },
     // Find one Channel using the id
@@ -69,12 +78,29 @@ const RootQuery = new GraphQLObjectType({
         return Channel.findOne({ id: args.id });
       }
     },
+    // Find all Channels
     channels: {
       type: new GraphQLList(ChannelType),
-      resolve(parent, args) {
-        return Channel.find();
+      resolve() {
+        return Channel.find().sort('name');
       }
-    }
+    },
+    // Find one DiscordUser using the id
+    discordUser: {
+      type: DiscordUserType,
+      args: { id: { type: GraphQLID } },
+      resolve(parent, args) {
+        return DiscordUser.findOne({ id: args.id });
+      }
+    },
+    // Find all Channels
+    discordUsers: {
+      type: new GraphQLList(DiscordUserType),
+      resolve() {
+        return DiscordUser.find().sort('name');
+      }
+    },
+
   }
 });
 
