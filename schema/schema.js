@@ -33,7 +33,13 @@ const ChannelType = new GraphQLObjectType({
   name: 'Channel',
   fields: () => ({
     id: { type: GraphQLID },
-    name: { type: GraphQLString }
+    name: { type: GraphQLString },
+    guild: {
+      type: GuildType,
+      resolve(parent, args) {
+        return Guild.findOne({ channels: parent.id });
+      }
+    }
   })
 });
 
