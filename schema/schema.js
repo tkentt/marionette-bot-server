@@ -4,6 +4,7 @@ const Channel = require('../models/channelModel');
 
 const {
   GraphQLID,
+  GraphQLList,
   GraphQLObjectType,
   GraphQLString,
   GraphQLSchema
@@ -13,7 +14,18 @@ const GuildType = new GraphQLObjectType({
   name: 'Guild',
   fields: () => ({
     id: { type: GraphQLID },
-    name: { type: GraphQLString }
+    name: { type: GraphQLString },
+    channels: {
+      type: new GraphQLList(ChannelType),
+      resolve(parent, args) {
+        return Channel.find()
+          .then(channels => {
+            return channels.filter(channel => {
+              return parent.channels.includes(channel.id);
+            });
+          });
+      }
+    }
   })
 });
 

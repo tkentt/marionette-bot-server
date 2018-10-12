@@ -5,7 +5,7 @@ const graphqlHTTP = require('express-graphql');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
-const path = require('path');
+// const path = require('path');
 // TODO: Figure out what refresh does
 const refresh = require('passport-oauth2-refresh');
 

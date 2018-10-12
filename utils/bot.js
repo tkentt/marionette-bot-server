@@ -15,10 +15,6 @@ const seedDatabase = (client) => {
 
 const insertGuilds = guilds => {
   const newGuilds = guilds.map(guild => {
-    const channels = guild.channels.array()
-      .filter(channel => channel.type === 'text')
-      .map(channel => channel.id);
-    console.log(channels);
     return {
       id: guild.id,
       name: guild.name,
