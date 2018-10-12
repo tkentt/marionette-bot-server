@@ -46,6 +46,7 @@ const ChannelType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
+    // Find one Guild using the id
     guild: {
       type: GuildType,
       args: { id: { type: GraphQLID } },
@@ -53,11 +54,25 @@ const RootQuery = new GraphQLObjectType({
         return Guild.findOne({ id: args.id });
       }
     },
+    // Find all Guild using the id
+    guilds: {
+      type: new GraphQLList(GuildType),
+      resolve(parent, args) {
+        return Guild.find();
+      }
+    },
+    // Find one Channel using the id
     channel: {
       type: ChannelType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
         return Channel.findOne({ id: args.id });
+      }
+    },
+    channels: {
+      type: new GraphQLList(ChannelType),
+      resolve(parent, args) {
+        return Channel.find();
       }
     }
   }
