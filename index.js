@@ -13,6 +13,7 @@ const refresh = require('passport-oauth2-refresh');
 const { DATABASE_URL, PORT, TOKEN  } = require('./config');
 const authRouter = require('./router/authRouter');
 const discordStrategy = require('./passport/discordStrategy');
+const jwtStrategy = require('./passport/jwtStrategy');
 const schema = require('./schema/schema');
 const { seedDatabase } = require('./utils/bot');
 const client = new Discord.Client();
@@ -29,6 +30,7 @@ app.use(cors());
 // Passport stuff
 app.use(passport.initialize());
 passport.use(discordStrategy);
+passport.use(jwtStrategy);
 // TODO: Figure out what refresh does
 refresh.use(discordStrategy);
 
@@ -36,7 +38,7 @@ refresh.use(discordStrategy);
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'));
 
 // GraphQL endpoint
-app.use('/graphql', graphqlHTTP({
+app.use('/graphql', passport.authenticate('jwt', { session: false, failWithError: true }), graphqlHTTP({
   schema,
   graphiql: true
 }));
