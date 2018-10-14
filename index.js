@@ -38,10 +38,13 @@ refresh.use(discordStrategy);
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'));
 
 // GraphQL endpoint
-app.use('/graphql', passport.authenticate('jwt', { session: false, failWithError: true }), graphqlHTTP({
+app.use('/graphql', passport.authenticate('jwt', { session: false, failWithError: true }), graphqlHTTP((req) => ({
   schema,
-  graphiql: true
-}));
+  graphiql: true,
+  context: {
+    user: req.user,
+  }
+})));
 
 // Routers
 app.use('/auth', authRouter);
