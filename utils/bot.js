@@ -1,6 +1,6 @@
-const Guild = require('../models/guildModel');
-const Channel = require('../models/channelModel');
-const DiscordUser = require('../models/discordUserModel');
+const Guild = require('../models/guild-model');
+const Channel = require('../models/channel-model');
+const DiscordUser = require('../models/discord-user-model');
 
 const seedDatabase = (client) => {
   Promise.all([

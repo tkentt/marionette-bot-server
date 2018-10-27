@@ -8,16 +8,16 @@ const morgan = require('morgan');
 const passport = require('passport');
 
 const { DATABASE_URL, PORT, TOKEN  } = require('./config');
-const authRouter = require('./router/authRouter');
-const discordStrategy = require('./passport/discordStrategy');
-const jwtStrategy = require('./passport/jwtStrategy');
+const authRouter = require('./router/auth-router');
+const discordStrategy = require('./passport/discord-strategy');
+const jwtStrategy = require('./passport/jwt-strategy');
 const schema = require('./schema/schema');
 const { seedDatabase } = require('./utils/bot');
 const client = new Discord.Client();
 
-const Guild = require('./models/guildModel');
-const Channel = require('./models/channelModel');
-const DiscordUser = require('./models/discordUserModel');
+const Guild = require('./models/guild-model');
+const Channel = require('./models/channel-model');
+const DiscordUser = require('./models/discord-user-model');
 
 const app = express();
 
@@ -47,15 +47,11 @@ app.use('/auth', authRouter);
 if (require.main === module) {
   mongoose.connect(DATABASE_URL, { useNewUrlParser:true })
     .then(() => client.login(TOKEN))
-    .catch(err => {
-      console.error(err);
-    });
+    .catch(err => console.error(err));
 
   app.listen(PORT, function() {
     console.info(`Server listening on ${this.address().port}`);
-  }).on('error', err => {
-    console.error(err);
-  });
+  }).on('error', err => console.error(err));
 }
 
 client.on('ready', () => {
