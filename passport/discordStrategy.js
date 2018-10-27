@@ -4,12 +4,11 @@ const { clientID, clientSecret } = require('../config');
 const User = require('../models/userModel');
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user);
 });
 
-passport.deserializeUser((id, done) => {
-  User.findOne({ _id: id })
-    .then(user => done(null, user));
+passport.deserializeUser((user, done) => {
+  done(null, user);
 });
 
 const discordStrategy = new DiscordStrategy({
@@ -17,7 +16,6 @@ const discordStrategy = new DiscordStrategy({
   clientID,
   clientSecret
 }, (accessToken, refreshToken, profile, done) => {
-  // TODO: Store tokens somewhere?
   return User.findOne({ discordId: profile.id })
     .then(user => {
       if (user) {

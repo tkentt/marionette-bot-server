@@ -1,17 +1,16 @@
 const router = require('express').Router();
 const passport = require('passport');
-const createAuthToken = require('../utils/createAuthToken');
 
 // auth with discord
-router.get('/discord', passport.authenticate('discord', {
+router.get('/', passport.authenticate('discord', {
   scope: ['identify', 'email', 'guilds']
 }));
 
 router.get(
-  '/discord/redirect',
-  passport.authenticate('discord'),
+  '/redirect',
+  passport.authenticate('discord', { failureRedirect: '/', session: false }),
   (req, res) => {
-    const token = createAuthToken(req.user.serialize());
+    const token = req.user.token;
     res.redirect(`http://localhost:3000/auth?token=${token}`);
   }
 );

@@ -6,7 +6,5 @@ module.exports = {
   TOKEN: process.env.TOKEN,
   clientID: process.env.clientID,
   clientSecret: process.env.clientSecret,
-  JWT_SECRET: process.env.JWT_SECRET,
-  JWT_EXPIRY: process.env.JWT_EXPIRY,
   SECRET: process.env.SECRET
 };

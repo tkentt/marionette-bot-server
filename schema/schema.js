@@ -2,7 +2,6 @@ const graphql = require('graphql');
 const Guild = require('../models/guildModel');
 const Channel = require('../models/channelModel');
 const DiscordUser = require('../models/discordUserModel');
-const createAuthToken = require('../utils/createAuthToken');
 
 const {
   GraphQLID,
@@ -107,15 +106,7 @@ const RootQuery = new GraphQLObjectType({
       resolve() {
         return DiscordUser.find().sort('name');
       }
-    },
-    jwt: {
-      type: AuthTokenType,
-      resolve(parent, args, req) {
-        const token = createAuthToken(req.user);
-        return { token };
-      }
     }
-
   }
 });
 
