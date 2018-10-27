@@ -1,6 +1,27 @@
+/* eslint-disable no-console */
+const Discord = require('discord.js');
+
 const Guild = require('../models/guild-model');
 const Channel = require('../models/channel-model');
 const DiscordUser = require('../models/discord-user-model');
+
+const client = new Discord.Client();
+const { TOKEN  } = require('../config');
+
+const initializeBot = () => {
+  client.login(TOKEN);
+  client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}`);
+    Promise.all([
+      Guild.collection.drop(),
+      Channel.collection.drop(),
+      DiscordUser.collection.drop()
+    ])
+      .then(seedDatabase(client))
+      .catch(err => console.log(err));
+  });
+};
+
 
 const seedDatabase = (client) => {
   Promise.all([
@@ -45,5 +66,5 @@ const insertDiscordUsers = discordUsers => {
 };
 
 module.exports = {
-  seedDatabase
+  initializeBot
 };

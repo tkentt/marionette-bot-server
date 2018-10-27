@@ -1,23 +1,17 @@
 /* eslint-disable no-console */
 const cors = require('cors');
-const Discord = require('discord.js');
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
 
-const { DATABASE_URL, PORT, TOKEN  } = require('./config');
+const { DATABASE_URL, PORT } = require('./config');
 const authRouter = require('./router/auth-router');
 const discordStrategy = require('./passport/discord-strategy');
 const jwtStrategy = require('./passport/jwt-strategy');
 const schema = require('./schema/schema');
-const { seedDatabase } = require('./utils/bot');
-const client = new Discord.Client();
-
-const Guild = require('./models/guild-model');
-const Channel = require('./models/channel-model');
-const DiscordUser = require('./models/discord-user-model');
+const { initializeBot } = require('./utils/bot');
 
 const app = express();
 
@@ -46,21 +40,10 @@ app.use('/auth', authRouter);
 
 if (require.main === module) {
   mongoose.connect(DATABASE_URL, { useNewUrlParser:true })
-    .then(() => client.login(TOKEN))
+    .then(() => initializeBot())
     .catch(err => console.error(err));
 
   app.listen(PORT, function() {
     console.info(`Server listening on ${this.address().port}`);
   }).on('error', err => console.error(err));
 }
-
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}`);
-  Promise.all([
-    Guild.collection.drop(),
-    Channel.collection.drop(),
-    DiscordUser.collection.drop()
-  ])
-    .then(seedDatabase(client))
-    .catch(err => console.log(err));
-});
