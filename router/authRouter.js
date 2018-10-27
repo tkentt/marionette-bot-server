@@ -10,8 +10,16 @@ router.get(
   '/redirect',
   passport.authenticate('discord', { failureRedirect: '/', session: false }),
   (req, res) => {
-    const token = req.user.token;
-    res.redirect(`http://localhost:3000/auth?token=${token}`);
+    const token = req.query.code;
+    res.redirect(`http://localhost:3000?token=${token}`);
+  }
+);
+
+router.get(
+  '/test',
+  passport.authenticate('discord', { failureRedirect: '/', session: false }),
+  (req, res) => {
+    console.log('working');
   }
 );
 
