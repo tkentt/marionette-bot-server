@@ -6,9 +6,6 @@ const graphqlHTTP = require('express-graphql');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
-// const path = require('path');
-// TODO: Figure out what refresh does
-const refresh = require('passport-oauth2-refresh');
 
 const { DATABASE_URL, PORT, TOKEN  } = require('./config');
 const authRouter = require('./router/authRouter');
@@ -31,8 +28,6 @@ app.use(cors());
 app.use(passport.initialize());
 passport.use(discordStrategy);
 passport.use(jwtStrategy);
-// TODO: Figure out what refresh does
-refresh.use(discordStrategy);
 
 // Log all requests
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'));
