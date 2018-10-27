@@ -11,7 +11,7 @@ const authRouter = require('./router/auth-router');
 const discordStrategy = require('./passport/discord-strategy');
 const jwtStrategy = require('./passport/jwt-strategy');
 const schema = require('./schema/schema');
-const { initializeBot } = require('./utils/bot');
+const { initializeBot } = require('./bot');
 
 const app = express();
 

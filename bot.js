@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 const Discord = require('discord.js');
 
-const Guild = require('../models/guild-model');
-const Channel = require('../models/channel-model');
-const DiscordUser = require('../models/discord-user-model');
+const Guild = require('./models/guild-model');
+const Channel = require('./models/channel-model');
+const DiscordUser = require('./models/discord-user-model');
 
 const client = new Discord.Client();
-const { TOKEN  } = require('../config');
+const { TOKEN  } = require('./config');
 
 const initializeBot = () => {
   client.login(TOKEN);
