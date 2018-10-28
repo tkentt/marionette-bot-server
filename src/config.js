@@ -8,5 +8,7 @@ module.exports = {
   clientSecret: process.env.clientSecret,
   JWT_SECRET: process.env.JWT_SECRET,
   JWT_EXPIRY: process.env.JWT_EXPIRY,
-  SECRET: process.env.SECRET
+  SECRET: process.env.SECRET,
+  PRISMA_ENDPOINT: process.env.PRISMA_ENDPOINT,
+  PRISMA_SECRET: process.env.PRISMA_SECRET
 };
