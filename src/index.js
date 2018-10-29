@@ -1,6 +1,32 @@
 /* eslint-disable no-console */
-import { GraphQlServer } from 'graphql-yoga';
+import { GraphQLServer } from 'graphql-yoga';
 
+const typeDefs = `
+  type Query {
+    hello: String!
+    name: String!
+  }
+`;
+
+const resolvers = {
+  Query: {
+    hello() {
+      return 'testing';
+    },
+    name() {
+      return 'Kent';
+    }
+  }
+};
+
+const server = new GraphQLServer({
+  typeDefs,
+  resolvers
+});
+
+server.start(() => {
+  console.log('Server Up');
+});
 
 // import cors from 'cors';
 // import express from 'express';
