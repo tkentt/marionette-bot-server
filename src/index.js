@@ -1,17 +1,17 @@
 /* eslint-disable no-console */
-const cors = require('cors');
-const express = require('express');
-const graphqlHTTP = require('express-graphql');
-const mongoose = require('mongoose');
-const morgan = require('morgan');
-const passport = require('passport');
+import cors from 'cors';
+import express from 'express';
+import graphqlHTTP from 'express-graphql';
+import mongoose from 'mongoose';
+import morgan from 'morgan';
+import passport from 'passport';
 
-const { DATABASE_URL, PORT } = require('./config');
-const authRouter = require('./router/auth-router');
-const discordStrategy = require('./passport/discord-strategy');
-const jwtStrategy = require('./passport/jwt-strategy');
-const schema = require('./schema/schema');
-const { initializeBot } = require('./bot');
+const { DATABASE_URL, PORT } = require('../config');
+const authRouter = require('../router/auth-router');
+const discordStrategy = require('../passport/discord-strategy');
+const jwtStrategy = require('../passport/jwt-strategy');
+const schema = require('../schema/schema');
+const { initializeBot } = require('../bot');
 
 const app = express();
 
