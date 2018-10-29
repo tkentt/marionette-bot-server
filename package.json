@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon src/index.js --ext js,graphql --exec babel-node",
     "start": "babel-node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "get-schema": "graphql get-schema -p prisma"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.2",
+    "graphql-cli": "^2.16.7",
     "graphql-yoga": "^1.16.7",
     "mongoose": "^5.3.1",
     "morgan": "^1.9.1",
