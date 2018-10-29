@@ -1,20 +1,27 @@
 /* eslint-disable no-console */
 import { GraphQLServer } from 'graphql-yoga';
+import db from './db';
 
 const typeDefs = `
   type Query {
-    hello: String!
+    guild: Guild!
+  }
+
+  type Guild {
+    id: ID!
     name: String!
+    channels: [String!]!
   }
 `;
 
 const resolvers = {
   Query: {
-    hello() {
-      return 'testing';
-    },
-    name() {
-      return 'Kent';
+    guild() {
+      return {
+        id: '123456789',
+        name: 'test-guild',
+        channels: []
+      };
     }
   }
 };

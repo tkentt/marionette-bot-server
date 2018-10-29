@@ -1,0 +1,15 @@
+type User {
+  discordId: String! @unique
+  username: String!
+  email: String!
+}
+
+type Guild {
+  discordId: String! @unique
+  name: String!
+}
+
+type Channel {
+  discordId: String! @unique
+  name: String!
+}
