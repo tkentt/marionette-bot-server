@@ -1,39 +1,9 @@
 /* eslint-disable no-console */
 import { GraphQLServer } from 'graphql-yoga';
-import db from './db';
-
-const typeDefs = `
-  type Query {
-    guild: Guild!
-  }
-
-  type Guild {
-    id: ID!
-    name: String!
-    channels: [String!]!
-  }
-`;
-
-const resolvers = {
-  Query: {
-    guild() {
-      return {
-        id: '123456789',
-        name: 'test-guild',
-        channels: []
-      };
-    }
-  }
-};
-
-const server = new GraphQLServer({
-  typeDefs,
-  resolvers
-});
-
-server.start(() => {
-  console.log('Server Up');
-});
+import prisma from './prisma';
+import { PORT } from '../config';
+import Query from './resolvers/query';
+import Mutation from './resolvers/mutation';
 
 // import cors from 'cors';
 // import express from 'express';
@@ -42,14 +12,24 @@ server.start(() => {
 // import morgan from 'morgan';
 // import passport from 'passport';
 
-// const { DATABASE_URL, PORT } = require('../config');
 // const authRouter = require('../router/auth-router');
 // const discordStrategy = require('../passport/discord-strategy');
 // const jwtStrategy = require('../passport/jwt-strategy');
 // const schema = require('../schema/schema');
 // const { initializeBot } = require('../bot');
 
-// const app = express();
+const resolvers = { Query, Mutation };
+
+const server = new GraphQLServer({
+  typeDefs: 'src/generated/prisma.graphql',
+  resolvers,
+  context: { prisma },
+  resolverValidationOptions: {
+    requireResolversForResolveType: false
+  }
+});
+
+server.start(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // // Use cors
 // app.use(cors());
@@ -60,16 +40,7 @@ server.start(() => {
 // passport.use(jwtStrategy);
 
 // // Log all requests
-// app.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'));
-
-// // GraphQL endpoint
-// app.use('/graphql', passport.authenticate('jwt', { session: false, failWithError: true }), graphqlHTTP((req) => ({
-//   schema,
-//   graphiql: true,
-//   context: {
-//     user: req.user,
-//   }
-// })));
+// server.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'));
 
 // // Routers
 // app.use('/auth', authRouter);

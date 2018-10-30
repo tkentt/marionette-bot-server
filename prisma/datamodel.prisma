@@ -2,14 +2,20 @@ type User {
   discordId: String! @unique
   username: String!
   email: String!
+  guilds: [Guild!]!
+  channels: [Channel!]!
 }
 
 type Guild {
   discordId: String! @unique
   name: String!
+  channels: [Channel!]!
+  users: [User!]!
 }
 
 type Channel {
   discordId: String! @unique
   name: String!
+  guild: Guild!
+  users: [User!]!
 }
