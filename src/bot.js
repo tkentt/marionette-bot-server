@@ -5,7 +5,7 @@ import { TOKEN } from './config';
 
 const client = new Discord.Client();
 
-const initializeBot = () => {
+const startClient = () => {
   client.login(TOKEN);
   client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -54,4 +54,4 @@ const upsertChannels = async channels => {
   return;
 };
 
-export default initializeBot;
+export default startClient;

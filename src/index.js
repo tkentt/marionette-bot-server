@@ -9,10 +9,9 @@ import Query from './resolvers/query';
 import Mutation from './resolvers/mutation';
 import authRouter from './router/auth-router';
 import discordStrategy from './passport/discord-strategy';
-import initializeBot from './bot';
-// import jwtStrategy from './passport/jwt-strategy';
-// const { initializeBot } = require('../bot');
+import startClient from './bot';
 
+// Setup Server
 const resolvers = { Query, Mutation };
 
 const server = new GraphQLServer({
@@ -26,14 +25,13 @@ const server = new GraphQLServer({
     requireResolversForResolveType: false
   }
 });
-// Start Server
+
 server.start({
   port: PORT,
   cors: { origin: CLIENT_ORIGIN }
 }, () => console.log(`Server running on port ${PORT}`));
 
 // Express Middleware
-// server.express.use(cors());
 server.express.use(morgan('common'));
 server.express.use(passport.initialize());
 
@@ -41,8 +39,7 @@ server.express.use(passport.initialize());
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 passport.use(discordStrategy);
-// passport.use(jwtStrategy);
 
 server.express.use('/auth', authRouter);
 
-initializeBot();
+startClient();
