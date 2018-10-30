@@ -2,20 +2,20 @@ type User {
   discordId: String! @unique
   username: String!
   email: String!
-  guilds: [Guild!]!
-  channels: [Channel!]!
+  guilds: [Guild!]! @relation(name: "UsersGuilds" onDelete: SET_NULL)
+  channels: [Channel!]! @relation(name: "UsersChannels" onDelete: SET_NULL)
 }
 
 type Guild {
   discordId: String! @unique
   name: String!
-  channels: [Channel!]!
-  users: [User!]!
+  channels: [Channel!]! @relation(name: "GuildChannels" onDelete: CASCADE)
+  users: [User!]! @relation(name: "UsersGuilds" onDelete: SET_NULL)
 }
 
 type Channel {
   discordId: String! @unique
   name: String!
-  guild: Guild!
-  users: [User!]!
+  guild: Guild! @relation(name: "GuildChannels" onDelete: SET_NULL)
+  users: [User!]! @relation(name: "UsersChannels" onDelete: SET_NULL)
 }

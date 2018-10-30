@@ -1,35 +1,33 @@
-import passport from 'passport';
-import { Strategy } from 'passport-discord';
-const { clientID, clientSecret } = require('../config');
+import { Strategy as DiscordStrategy }  from 'passport-discord';
+import { clientID, clientSecret } from '../config';
+import prisma from '../prisma';
 
-// passport.serializeUser((user, done) => {
-//   done(null, user.id);
-// });
+const getOrCreateUser = async profile => {
+  let user = await prisma.query.user({
+    where: { discordId: profile.id }
+  }, '{ discordId username email }');
 
-// passport.deserializeUser((id, done) => {
-//   User.findOne({ _id: id })
-//     .then(user => done(null, user));
-// });
+  if (!user) {
+    user = await prisma.mutation.createUser({
+      data: {
+        discordId: profile.id,
+        username: profile.username,
+        email: profile.email
+      }
+    }, '{ discordId username email }');
+  }
 
-// const discordStrategy = new DiscordStrategy({
-//   callbackURL: '/auth/discord/redirect',
-//   clientID,
-//   clientSecret
-// }, (accessToken, refreshToken, profile, done) => {
-//   return User.findOne({ discordId: profile.id })
-//     .then(user => {
-//       if (user) {
-//         return user;
-//       } else {
-//         return User.create({
-//           username: profile.username,
-//           email: profile.email,
-//           discordId: profile.id
-//         });
-//       }
-//     })
-//     .then(user => done(null, user))
-//     .catch(err => done(err));
-// });
+  return user;
+};
 
-// module.exports = discordStrategy;
+const discordStrategy = new DiscordStrategy({
+  callbackURL: '/auth/discord/redirect',
+  clientID,
+  clientSecret
+}, (accessToken, refreshToken, profile, done) => {
+  return getOrCreateUser(profile)
+    .then(user => done(null, user))
+    .catch(err => done(err));
+});
+
+export default discordStrategy;

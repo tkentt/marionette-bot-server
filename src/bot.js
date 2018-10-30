@@ -1,70 +1,57 @@
-// /* eslint-disable no-console */
-// const Discord = require('discord.js');
+/* eslint-disable no-console */
+import Discord from 'discord.js';
+import prisma from './prisma';
+import { TOKEN } from './config';
 
-// const Guild = require('./models/guild-model');
-// const Channel = require('./models/channel-model');
-// const DiscordUser = require('./models/discord-user-model');
+const client = new Discord.Client();
 
-// const client = new Discord.Client();
-// const { TOKEN  } = require('./config');
+const initializeBot = () => {
+  client.login(TOKEN);
+  client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}`);
+    upsertGuilds(client.guilds.array())
+      .then(() => upsertChannels(client.channels.array()))
+      .catch(err => console.log(err));
+  });
+};
 
-// const initializeBot = () => {
-//   client.login(TOKEN);
-//   client.on('ready', () => {
-//     console.log(`Logged in as ${client.user.tag}`);
-//     Promise.all([
-//       Guild.collection.drop(),
-//       Channel.collection.drop(),
-//       DiscordUser.collection.drop()
-//     ])
-//       .then(seedDatabase(client))
-//       .catch(err => console.log(err));
-//   });
-// };
+const upsertGuilds = async guilds => {
+  const newGuilds = await guilds.map(guild => ({
+    discordId: guild.id,
+    name: guild.name
+  }));
 
+  for (let i=0; i<newGuilds.length; i++) {
+    await prisma.mutation.upsertGuild({
+      where: { discordId: newGuilds[i].discordId },
+      create: newGuilds[i],
+      update: newGuilds[i]
+    });
+  }
 
-// const seedDatabase = (client) => {
-//   Promise.all([
-//     Guild.createIndexes(),
-//     insertGuilds(client.guilds.array()),
-//     Channel.createIndexes(),
-//     insertChannels(client.channels.array()),
-//     DiscordUser.createIndexes(),
-//     insertDiscordUsers(client.users.array())
-//   ]);
-// };
+  return;
+};
 
-// const insertGuilds = guilds => {
-//   const newGuilds = guilds.map(guild => {
-//     return {
-//       id: guild.id,
-//       name: guild.name,
-//       channels: guild.channels.array()
-//         .filter(channel => channel.type === 'text')
-//         .map(channel => channel.id)
-//     };
-//   });
-//   return Guild.insertMany(newGuilds);
-// };
+const upsertChannels = async channels => {
+  const newChannels = await channels
+    .filter(channel => channel.type === 'text')
+    .map(channel => ({
+      discordId: channel.id,
+      name: channel.name,
+      guild: {
+        connect: { discordId: channel.guild.id }
+      }
+    }));
 
-// const insertChannels = channels => {
-//   const newChannels = channels
-//     .filter(channel => channel.type === 'text')
-//     .map(channel => ({
-//       id: channel.id,
-//       name: channel.name
-//     }));
-//   return Channel.insertMany(newChannels);
-// };
+  for (let i=0; i<newChannels.length; i++) {
+    await prisma.mutation.upsertChannel({
+      where: { discordId: newChannels[i].discordId },
+      create: newChannels[i],
+      update: newChannels[i]
+    });
+  }
 
-// const insertDiscordUsers = discordUsers => {
-//   const newDiscordUsers = discordUsers.map(discordUser => ({
-//     id: discordUser.id,
-//     name: discordUser.username
-//   }));
-//   return DiscordUser.insertMany(newDiscordUsers);
-// };
+  return;
+};
 
-// module.exports = {
-//   initializeBot
-// };
+export default initializeBot;

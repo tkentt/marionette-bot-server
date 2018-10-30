@@ -1,16 +1,16 @@
 /* eslint-disable no-console */
-import cors from 'cors';
 import { GraphQLServer } from 'graphql-yoga';
 import morgan from 'morgan';
 import passport from 'passport';
 
 import prisma from './prisma';
-import { PORT } from './config';
+import { PORT, CLIENT_ORIGIN } from './config';
 import Query from './resolvers/query';
 import Mutation from './resolvers/mutation';
-// const authRouter = require('./router/auth-router');
-// const discordStrategy = require('./passport/discord-strategy');
-// const jwtStrategy = require('./passport/jwt-strategy');
+import authRouter from './router/auth-router';
+import discordStrategy from './passport/discord-strategy';
+import initializeBot from './bot';
+// import jwtStrategy from './passport/jwt-strategy';
 // const { initializeBot } = require('../bot');
 
 const resolvers = { Query, Mutation };
@@ -18,22 +18,31 @@ const resolvers = { Query, Mutation };
 const server = new GraphQLServer({
   typeDefs: 'src/generated/prisma.graphql',
   resolvers,
-  context: { prisma },
+  context(request) {
+    console.log(request.request.headers);
+    return { prisma, request };
+  },
   resolverValidationOptions: {
     requireResolversForResolveType: false
   }
 });
-
 // Start Server
-server.start(PORT, () => console.log(`Server running on port ${PORT}`));
+server.start({
+  port: PORT,
+  cors: { origin: CLIENT_ORIGIN }
+}, () => console.log(`Server running on port ${PORT}`));
 
 // Express Middleware
-server.express.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'));
-server.express.use(cors());
+// server.express.use(cors());
+server.express.use(morgan('common'));
 server.express.use(passport.initialize());
 
 // Authentication
-// passport.use(discordStrategy);
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
+passport.use(discordStrategy);
 // passport.use(jwtStrategy);
 
-// server.express.use('/auth', authRouter);
+server.express.use('/auth', authRouter);
+
+initializeBot();

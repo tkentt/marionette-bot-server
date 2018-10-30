@@ -10,9 +10,10 @@ router.get(
   '/discord/redirect',
   passport.authenticate('discord'),
   (req, res) => {
-    const token = createAuthToken(req.user.serialize());
+    const token = req.query.code;
     res.redirect(`http://localhost:3000/auth?token=${token}`);
   }
 );
+
 
 module.exports = router;

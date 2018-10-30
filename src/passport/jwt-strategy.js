@@ -1,5 +1,5 @@
-const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
-const { JWT_SECRET } = require('../config');
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+import { JWT_SECRET } from '../config';
 
 const options = {
   secretOrKey: JWT_SECRET,
@@ -11,4 +11,4 @@ const jwtStrategy = new JwtStrategy(options, (payload, done) => {
   done(null, payload.user);
 });
 
-module.exports = jwtStrategy;
+export default jwtStrategy;
