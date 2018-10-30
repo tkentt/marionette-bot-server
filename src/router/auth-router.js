@@ -2,7 +2,6 @@ const router = require('express').Router();
 const passport = require('passport');
 const createAuthToken = require('../utils/create-auth-token');
 
-// auth with discord
 router.get('/discord', passport.authenticate('discord', {
   scope: ['identify', 'email', 'guilds']
 }));
