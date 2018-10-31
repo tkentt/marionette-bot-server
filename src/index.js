@@ -11,6 +11,7 @@ import authRouter from './router/auth-router';
 import discordStrategy from './passport/discord-strategy';
 import startClient from './bot';
 import authMiddleware from './resolvers/auth-middleware';
+
 // Setup Server
 const resolvers = { Query, Mutation };
 

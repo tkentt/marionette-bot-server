@@ -4,7 +4,7 @@ import createAuthToken from '../utils/create-auth-token';
 const router = express.Router();
 
 router.get('/discord', passport.authenticate('discord', {
-  scope: ['identify', 'email', 'guilds']
+  scope: ['identify', 'email']
 }));
 
 router.get(
