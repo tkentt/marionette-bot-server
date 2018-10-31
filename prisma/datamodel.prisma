@@ -1,9 +1,8 @@
 type User {
   discordId: String! @unique
-  username: String!
-  email: String!
+  username: String
+  email: String
   guilds: [Guild!]! @relation(name: "UsersGuilds" onDelete: SET_NULL)
-  channels: [Channel!]! @relation(name: "UsersChannels" onDelete: SET_NULL)
 }
 
 type Guild {
@@ -17,5 +16,4 @@ type Channel {
   discordId: String! @unique
   name: String!
   guild: Guild! @relation(name: "GuildChannels" onDelete: SET_NULL)
-  users: [User!]! @relation(name: "UsersChannels" onDelete: SET_NULL)
 }

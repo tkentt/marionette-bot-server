@@ -11,22 +11,43 @@ const startClient = () => {
     console.log(`Logged in as ${client.user.tag}`);
     upsertGuilds(client.guilds.array())
       .then(() => upsertChannels(client.channels.array()))
+      .then(() => upsertUsers(client.guilds.array()))
       .catch(err => console.log(err));
   });
 };
 
 const upsertGuilds = async guilds => {
-  const newGuilds = await guilds.map(guild => ({
-    discordId: guild.id,
-    name: guild.name
-  }));
+  for (let i=0; i<guilds.length; i++) {
+    const guild = {
+      discordId: guilds[i].id,
+      name: guilds[i].name
+    };
 
-  for (let i=0; i<newGuilds.length; i++) {
     await prisma.mutation.upsertGuild({
-      where: { discordId: newGuilds[i].discordId },
-      create: newGuilds[i],
-      update: newGuilds[i]
+      where: { discordId: guild.discordId },
+      create: guild,
+      update: guild
     });
+
+    const channels = await guilds[0].channels.array()
+      .filter(channel => channel.type === 'text');
+
+    for (let j=0; j<channels.length; j++) {
+      const channel = {
+        discordId: channels[j].id,
+        name: channels[j].name,
+        guild: {
+          connect: { discordId: guild.discordId }
+        }
+      };
+
+      await prisma.mutation.upsertChannel({
+        where: { discordId: channel.discordId },
+        create: channel,
+        update: channel
+      });
+    }
+
   }
 
   return;
@@ -50,6 +71,12 @@ const upsertChannels = async channels => {
       update: newChannels[i]
     });
   }
+
+  return;
+};
+
+const upsertUsers = async guilds => {
+  const users = {};
 
   return;
 };

@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Tue Oct 30 2018 14:47:04 GMT-0400 (Eastern Daylight Time)
+# timestamp: Wed Oct 31 2018 01:26:06 GMT-0400 (Eastern Daylight Time)
 
 type AggregateChannel {
   count: Int!
@@ -22,7 +22,6 @@ type Channel {
   discordId: String!
   name: String!
   guild: Guild!
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
 
 """A connection to a list of items."""
@@ -39,7 +38,6 @@ input ChannelCreateInput {
   discordId: String!
   name: String!
   guild: GuildCreateOneWithoutChannelsInput!
-  users: UserCreateManyWithoutChannelsInput
 }
 
 input ChannelCreateManyWithoutGuildInput {
@@ -47,21 +45,9 @@ input ChannelCreateManyWithoutGuildInput {
   connect: [ChannelWhereUniqueInput!]
 }
 
-input ChannelCreateManyWithoutUsersInput {
-  create: [ChannelCreateWithoutUsersInput!]
-  connect: [ChannelWhereUniqueInput!]
-}
-
 input ChannelCreateWithoutGuildInput {
   discordId: String!
   name: String!
-  users: UserCreateManyWithoutChannelsInput
-}
-
-input ChannelCreateWithoutUsersInput {
-  discordId: String!
-  name: String!
-  guild: GuildCreateOneWithoutChannelsInput!
 }
 
 """An edge in a connection."""
@@ -134,7 +120,6 @@ input ChannelUpdateInput {
   discordId: String
   name: String
   guild: GuildUpdateOneRequiredWithoutChannelsInput
-  users: UserUpdateManyWithoutChannelsInput
 }
 
 input ChannelUpdateManyMutationInput {
@@ -151,25 +136,9 @@ input ChannelUpdateManyWithoutGuildInput {
   upsert: [ChannelUpsertWithWhereUniqueWithoutGuildInput!]
 }
 
-input ChannelUpdateManyWithoutUsersInput {
-  create: [ChannelCreateWithoutUsersInput!]
-  connect: [ChannelWhereUniqueInput!]
-  disconnect: [ChannelWhereUniqueInput!]
-  delete: [ChannelWhereUniqueInput!]
-  update: [ChannelUpdateWithWhereUniqueWithoutUsersInput!]
-  upsert: [ChannelUpsertWithWhereUniqueWithoutUsersInput!]
-}
-
 input ChannelUpdateWithoutGuildDataInput {
   discordId: String
   name: String
-  users: UserUpdateManyWithoutChannelsInput
-}
-
-input ChannelUpdateWithoutUsersDataInput {
-  discordId: String
-  name: String
-  guild: GuildUpdateOneRequiredWithoutChannelsInput
 }
 
 input ChannelUpdateWithWhereUniqueWithoutGuildInput {
@@ -177,21 +146,10 @@ input ChannelUpdateWithWhereUniqueWithoutGuildInput {
   data: ChannelUpdateWithoutGuildDataInput!
 }
 
-input ChannelUpdateWithWhereUniqueWithoutUsersInput {
-  where: ChannelWhereUniqueInput!
-  data: ChannelUpdateWithoutUsersDataInput!
-}
-
 input ChannelUpsertWithWhereUniqueWithoutGuildInput {
   where: ChannelWhereUniqueInput!
   update: ChannelUpdateWithoutGuildDataInput!
   create: ChannelCreateWithoutGuildInput!
-}
-
-input ChannelUpsertWithWhereUniqueWithoutUsersInput {
-  where: ChannelWhereUniqueInput!
-  update: ChannelUpdateWithoutUsersDataInput!
-  create: ChannelCreateWithoutUsersInput!
 }
 
 input ChannelWhereInput {
@@ -284,9 +242,6 @@ input ChannelWhereInput {
   """All values not ending with the given string."""
   name_not_ends_with: String
   guild: GuildWhereInput
-  users_every: UserWhereInput
-  users_some: UserWhereInput
-  users_none: UserWhereInput
 }
 
 input ChannelWhereUniqueInput {
@@ -650,10 +605,9 @@ type Subscription {
 
 type User {
   discordId: String!
-  username: String!
-  email: String!
+  username: String
+  email: String
   guilds(where: GuildWhereInput, orderBy: GuildOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Guild!]
-  channels(where: ChannelWhereInput, orderBy: ChannelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Channel!]
 }
 
 """A connection to a list of items."""
@@ -668,15 +622,9 @@ type UserConnection {
 
 input UserCreateInput {
   discordId: String!
-  username: String!
-  email: String!
+  username: String
+  email: String
   guilds: GuildCreateManyWithoutUsersInput
-  channels: ChannelCreateManyWithoutUsersInput
-}
-
-input UserCreateManyWithoutChannelsInput {
-  create: [UserCreateWithoutChannelsInput!]
-  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateManyWithoutGuildsInput {
@@ -684,18 +632,10 @@ input UserCreateManyWithoutGuildsInput {
   connect: [UserWhereUniqueInput!]
 }
 
-input UserCreateWithoutChannelsInput {
-  discordId: String!
-  username: String!
-  email: String!
-  guilds: GuildCreateManyWithoutUsersInput
-}
-
 input UserCreateWithoutGuildsInput {
   discordId: String!
-  username: String!
-  email: String!
-  channels: ChannelCreateManyWithoutUsersInput
+  username: String
+  email: String
 }
 
 """An edge in a connection."""
@@ -724,8 +664,8 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   discordId: String!
-  username: String!
-  email: String!
+  username: String
+  email: String
 }
 
 type UserSubscriptionPayload {
@@ -772,22 +712,12 @@ input UserUpdateInput {
   username: String
   email: String
   guilds: GuildUpdateManyWithoutUsersInput
-  channels: ChannelUpdateManyWithoutUsersInput
 }
 
 input UserUpdateManyMutationInput {
   discordId: String
   username: String
   email: String
-}
-
-input UserUpdateManyWithoutChannelsInput {
-  create: [UserCreateWithoutChannelsInput!]
-  connect: [UserWhereUniqueInput!]
-  disconnect: [UserWhereUniqueInput!]
-  delete: [UserWhereUniqueInput!]
-  update: [UserUpdateWithWhereUniqueWithoutChannelsInput!]
-  upsert: [UserUpsertWithWhereUniqueWithoutChannelsInput!]
 }
 
 input UserUpdateManyWithoutGuildsInput {
@@ -799,34 +729,15 @@ input UserUpdateManyWithoutGuildsInput {
   upsert: [UserUpsertWithWhereUniqueWithoutGuildsInput!]
 }
 
-input UserUpdateWithoutChannelsDataInput {
-  discordId: String
-  username: String
-  email: String
-  guilds: GuildUpdateManyWithoutUsersInput
-}
-
 input UserUpdateWithoutGuildsDataInput {
   discordId: String
   username: String
   email: String
-  channels: ChannelUpdateManyWithoutUsersInput
-}
-
-input UserUpdateWithWhereUniqueWithoutChannelsInput {
-  where: UserWhereUniqueInput!
-  data: UserUpdateWithoutChannelsDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutGuildsInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutGuildsDataInput!
-}
-
-input UserUpsertWithWhereUniqueWithoutChannelsInput {
-  where: UserWhereUniqueInput!
-  update: UserUpdateWithoutChannelsDataInput!
-  create: UserCreateWithoutChannelsInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutGuildsInput {
@@ -967,9 +878,6 @@ input UserWhereInput {
   guilds_every: GuildWhereInput
   guilds_some: GuildWhereInput
   guilds_none: GuildWhereInput
-  channels_every: ChannelWhereInput
-  channels_some: ChannelWhereInput
-  channels_none: ChannelWhereInput
 }
 
 input UserWhereUniqueInput {
