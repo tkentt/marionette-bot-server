@@ -37,7 +37,6 @@ server.start({
 // Express Middleware
 server.express.use(morgan('common'));
 server.express.use(passport.initialize());
-server.express.post(server.options.endpoint, () => console.log('running'));
 
 // Authentication
 passport.serializeUser((user, done) => done(null, user));

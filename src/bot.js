@@ -57,8 +57,6 @@ const upsertGuilds = async guilds => {
         }
       };
 
-      console.log(member);
-      // console.log(guild, channel);
       await prisma.mutation.upsertUser({
         where: { discordId: member.discordId },
         create: member,
