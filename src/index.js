@@ -10,30 +10,33 @@ import Mutation from './resolvers/mutation';
 import authRouter from './router/auth-router';
 import discordStrategy from './passport/discord-strategy';
 import startClient from './bot';
-
+import authMiddleware from './resolvers/auth-middleware';
 // Setup Server
 const resolvers = { Query, Mutation };
 
 const server = new GraphQLServer({
   typeDefs: 'src/generated/prisma.graphql',
   resolvers,
-  context(request) {
-    console.log(request.request.headers);
-    return { prisma, request };
+  context(req) {
+    return { prisma, ...req };
   },
   resolverValidationOptions: {
     requireResolversForResolveType: false
-  }
+  },
+  middlewares: [authMiddleware]
 });
 
 server.start({
   port: PORT,
-  cors: { origin: CLIENT_ORIGIN }
+  cors: { origin: CLIENT_ORIGIN },
+  endpoint: '/api',
+  getEndpoint: true
 }, () => console.log(`Server running on port ${PORT}`));
 
 // Express Middleware
 server.express.use(morgan('common'));
 server.express.use(passport.initialize());
+server.express.post(server.options.endpoint, () => console.log('running'));
 
 // Authentication
 passport.serializeUser((user, done) => done(null, user));
