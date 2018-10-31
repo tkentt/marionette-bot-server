@@ -5,15 +5,14 @@ import prisma from '../prisma';
 const upsertUser = async profile => {
   const userInfo = {
     discordId: profile.id,
-    username: profile.username,
-    email: profile.email
+    username: profile.username
   };
 
   const user = await prisma.mutation.upsertUser({
     where: { discordId: profile.id },
     create: userInfo,
     update: userInfo
-  }, '{ discordId username email }');
+  }, '{ discordId username }');
 
   return user;
 };

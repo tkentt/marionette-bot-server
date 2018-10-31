@@ -14,6 +14,10 @@ const startClient = () => {
   });
 };
 
+const seedData = async client => {
+  await upsertGuilds(client.guilds.array());
+};
+
 const upsertGuilds = async guilds => {
   for (let i=0; i<guilds.length; i++) {
     const guild = {

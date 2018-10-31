@@ -1,7 +1,6 @@
 type User {
   discordId: String! @unique
   username: String
-  email: String
   guilds: [Guild!]! @relation(name: "UsersGuilds" onDelete: SET_NULL)
 }
 

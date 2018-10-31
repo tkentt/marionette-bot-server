@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Wed Oct 31 2018 01:26:06 GMT-0400 (Eastern Daylight Time)
+# timestamp: Wed Oct 31 2018 19:29:05 GMT-0400 (Eastern Daylight Time)
 
 type AggregateChannel {
   count: Int!
@@ -606,7 +606,6 @@ type Subscription {
 type User {
   discordId: String!
   username: String
-  email: String
   guilds(where: GuildWhereInput, orderBy: GuildOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Guild!]
 }
 
@@ -623,7 +622,6 @@ type UserConnection {
 input UserCreateInput {
   discordId: String!
   username: String
-  email: String
   guilds: GuildCreateManyWithoutUsersInput
 }
 
@@ -635,7 +633,6 @@ input UserCreateManyWithoutGuildsInput {
 input UserCreateWithoutGuildsInput {
   discordId: String!
   username: String
-  email: String
 }
 
 """An edge in a connection."""
@@ -652,8 +649,6 @@ enum UserOrderByInput {
   discordId_DESC
   username_ASC
   username_DESC
-  email_ASC
-  email_DESC
   id_ASC
   id_DESC
   updatedAt_ASC
@@ -665,7 +660,6 @@ enum UserOrderByInput {
 type UserPreviousValues {
   discordId: String!
   username: String
-  email: String
 }
 
 type UserSubscriptionPayload {
@@ -710,14 +704,12 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   discordId: String
   username: String
-  email: String
   guilds: GuildUpdateManyWithoutUsersInput
 }
 
 input UserUpdateManyMutationInput {
   discordId: String
   username: String
-  email: String
 }
 
 input UserUpdateManyWithoutGuildsInput {
@@ -732,7 +724,6 @@ input UserUpdateManyWithoutGuildsInput {
 input UserUpdateWithoutGuildsDataInput {
   discordId: String
   username: String
-  email: String
 }
 
 input UserUpdateWithWhereUniqueWithoutGuildsInput {
@@ -835,46 +826,6 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   username_not_ends_with: String
-  email: String
-
-  """All values that are not equal to given value."""
-  email_not: String
-
-  """All values that are contained in given list."""
-  email_in: [String!]
-
-  """All values that are not contained in given list."""
-  email_not_in: [String!]
-
-  """All values less than the given value."""
-  email_lt: String
-
-  """All values less than or equal the given value."""
-  email_lte: String
-
-  """All values greater than the given value."""
-  email_gt: String
-
-  """All values greater than or equal the given value."""
-  email_gte: String
-
-  """All values containing the given string."""
-  email_contains: String
-
-  """All values not containing the given string."""
-  email_not_contains: String
-
-  """All values starting with the given string."""
-  email_starts_with: String
-
-  """All values not starting with the given string."""
-  email_not_starts_with: String
-
-  """All values ending with the given string."""
-  email_ends_with: String
-
-  """All values not ending with the given string."""
-  email_not_ends_with: String
   guilds_every: GuildWhereInput
   guilds_some: GuildWhereInput
   guilds_none: GuildWhereInput
