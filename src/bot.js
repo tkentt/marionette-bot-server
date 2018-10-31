@@ -10,8 +10,6 @@ const startClient = () => {
   client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
     upsertGuilds(client.guilds.array())
-      .then(() => upsertChannels(client.channels.array()))
-      .then(() => upsertUsers(client.guilds.array()))
       .catch(err => console.log(err));
   });
 };
@@ -29,11 +27,11 @@ const upsertGuilds = async guilds => {
       update: guild
     });
 
-    const channels = await guilds[0].channels.array()
+    const channels = guilds[i].channels.array()
       .filter(channel => channel.type === 'text');
 
     for (let j=0; j<channels.length; j++) {
-      const channel = {
+      let channel = {
         discordId: channels[j].id,
         name: channels[j].name,
         guild: {
@@ -48,35 +46,26 @@ const upsertGuilds = async guilds => {
       });
     }
 
+    const members = guilds[i].members.array();
+
+    for (let k=0; k<members.length; k++) {
+      let member = {
+        discordId: members[k].user.id,
+        username: members[k].user.username,
+        guilds: {
+          connect: { discordId: guild.discordId }
+        }
+      };
+
+      console.log(member);
+      // console.log(guild, channel);
+      await prisma.mutation.upsertUser({
+        where: { discordId: member.discordId },
+        create: member,
+        update: member
+      });
+    }
   }
-
-  return;
-};
-
-const upsertChannels = async channels => {
-  const newChannels = await channels
-    .filter(channel => channel.type === 'text')
-    .map(channel => ({
-      discordId: channel.id,
-      name: channel.name,
-      guild: {
-        connect: { discordId: channel.guild.id }
-      }
-    }));
-
-  for (let i=0; i<newChannels.length; i++) {
-    await prisma.mutation.upsertChannel({
-      where: { discordId: newChannels[i].discordId },
-      create: newChannels[i],
-      update: newChannels[i]
-    });
-  }
-
-  return;
-};
-
-const upsertUsers = async guilds => {
-  const users = {};
 
   return;
 };
