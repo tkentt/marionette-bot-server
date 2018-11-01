@@ -10,5 +10,6 @@ module.exports = {
   JWT_SECRET: process.env.JWT_SECRET,
   JWT_EXPIRY: process.env.JWT_EXPIRY,
   SECRET: process.env.SECRET,
-  PRISMA_SECRET: process.env.PRISMA_SECRET
+  PRISMA_SECRET: process.env.PRISMA_SECRET,
+  PRISMA_ENDPOINT: process.env.PRISMA_ENDPOINT
 };
