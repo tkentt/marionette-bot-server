@@ -88,15 +88,36 @@ const handleEvents = client => {
   });
 
   client.on('guildMemberAdd', async member => {
+    const data = {
+      discordId: member.user.id,
+      username: member.user.username,
+      guilds: {
+        connect: { discordId: member.guild.id }
+      }
+    };
+
+    await prisma.mutation.upsertUser({
+      where: { discordId: data.discordId },
+      create: data,
+      update: data
+    });
     console.log('member added');
   });
 
   client.on('guildMemberRemove', async member => {
-    console.log('member removed');
-  });
+    const data = {
+      discordId: member.user.id,
+      username: member.user.username,
+      guilds: {
+        disconnect: { discordId: member.guild.id }
+      }
+    };
 
-  client.on('guildMemberUpdate', async(oldMember, newMember) => {
-    console.log('member updated');
+    await prisma.mutation.updateUser({
+      where: { discordId: data.discordId },
+      data
+    });
+    console.log('member removed');
   });
 };
 
