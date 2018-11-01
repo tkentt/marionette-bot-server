@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import '@babel/polyfill';
 import { GraphQLServer } from 'graphql-yoga';
 import morgan from 'morgan';
 import passport from 'passport';
