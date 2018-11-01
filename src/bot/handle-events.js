@@ -1,20 +1,26 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 import prisma from '../prisma';
+import { upsertGuildChannels, upsertGuildMembers } from './start-client';
 
 const handleEvents = client => {
   client.on('channelCreate', async channel => {
     if (channel.type === 'text') {
-      const data = {
-        discordId: channel.id,
-        name: channel.name,
-        guild: {
-          connect: { discordId: channel.guild.id }
-        }
-      };
+      const guild = await prisma.query.guild({ where:{ discordId:  channel.guild.id } });
 
-      await prisma.mutation.createChannel({ data });
-      console.log('text channel created');
+      if (guild) {
+        const data = {
+          discordId: channel.id,
+          name: channel.name,
+          guild: {
+            connect: { discordId: guild.discordId }
+          }
+        };
+        await prisma.mutation.createChannel({ data });
+        console.log('text channel created');
+      } else {
+        console.log('create guild first');
+      }
     } else {
       console.log('voice channel ignored');
     }
@@ -48,14 +54,36 @@ const handleEvents = client => {
   });
 
   client.on('guildCreate', async guild => {
+    const data = {
+      discordId: guild.id,
+      name: guild.name
+    };
+    const channels = guild.channels.array()
+      .filter(channel => channel.type === 'text');
+    const members = guild.members.array();
+
+    await prisma.mutation.createGuild({ data });
+    upsertGuildChannels(data, channels);
+    upsertGuildMembers(data, members);
     console.log('guild created');
   });
 
   client.on('guildDelete', async guild => {
+    await prisma.mutation.deleteGuild({
+      where: { discordId: guild.id }
+    });
     console.log('guild deleted');
   });
 
   client.on('guildUpdate', async(oldGuild, newGuild) => {
+    const data = {
+      discordId: newGuild.id,
+      name: newGuild.name
+    };
+    await prisma.mutation.updateGuild({
+      where: { discordId: oldGuild.id },
+      data
+    });
     console.log('guild updated');
   });
 

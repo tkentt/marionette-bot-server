@@ -36,7 +36,7 @@ const upsertGuilds = async guilds => {
   return;
 };
 
-const upsertGuildChannels = async(guild, channels) => {
+export const upsertGuildChannels = async(guild, channels) => {
   for (let j=0; j<channels.length; j++) {
     let channel = {
       discordId: channels[j].id,
@@ -45,7 +45,6 @@ const upsertGuildChannels = async(guild, channels) => {
         connect: { discordId: guild.discordId }
       }
     };
-
     await prisma.mutation.upsertChannel({
       where: { discordId: channel.discordId },
       create: channel,
@@ -54,7 +53,7 @@ const upsertGuildChannels = async(guild, channels) => {
   }
 };
 
-const upsertGuildMembers = async(guild, members) => {
+export const upsertGuildMembers = async(guild, members) => {
   for (let k=0; k<members.length; k++) {
     let member = {
       discordId: members[k].user.id,
