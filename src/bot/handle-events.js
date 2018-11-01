@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import prisma from '../prisma';
 
-const updateDb = client => {
+const handleEvents = client => {
   client.on('channelCreate', async channel => {
     if (channel.type === 'text') {
       const data = {
@@ -47,29 +47,29 @@ const updateDb = client => {
     }
   });
 
-  client.on('guildCreate', guild => {
+  client.on('guildCreate', async guild => {
     console.log('guild created');
   });
 
-  client.on('guildDelete', guild => {
+  client.on('guildDelete', async guild => {
     console.log('guild deleted');
   });
 
-  client.on('guildUpdate', (oldGuild, newGuild) => {
+  client.on('guildUpdate', async(oldGuild, newGuild) => {
     console.log('guild updated');
   });
 
-  client.on('guildMemberAdd', member => {
+  client.on('guildMemberAdd', async member => {
     console.log('member added');
   });
 
-  client.on('guildMemberRemove', member => {
+  client.on('guildMemberRemove', async member => {
     console.log('member removed');
   });
 
-  client.on('guildMemberUpdate', (oldMember, newMember) => {
+  client.on('guildMemberUpdate', async(oldMember, newMember) => {
     console.log('member updated');
   });
 };
 
-export default updateDb;
+export default handleEvents;

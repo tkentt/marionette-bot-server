@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 import prisma from '../prisma';
 import { TOKEN } from '../config';
-import updateDb from './update-db';
+import handleEvents from './handle-events';
 
 const startClient = (client) => {
   client.login(TOKEN);
   client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
     upsertGuilds(client.guilds.array())
-      .then(updateDb(client))
+      .then(handleEvents(client))
       .catch(err => console.log(err));
   });
 };
