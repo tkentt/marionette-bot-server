@@ -16,3 +16,10 @@ type Channel {
   name: String!
   guild: Guild! @relation(name: "GuildChannels" onDelete: SET_NULL)
 }
+
+type Message {
+  content: String!
+  userId: String!
+  channelId: String!
+  guildId: String!
+}

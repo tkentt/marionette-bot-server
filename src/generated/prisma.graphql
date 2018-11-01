@@ -1,11 +1,15 @@
 # source: http://localhost:4466
-# timestamp: Wed Oct 31 2018 19:29:05 GMT-0400 (Eastern Daylight Time)
+# timestamp: Wed Oct 31 2018 23:03:12 GMT-0400 (Eastern Daylight Time)
 
 type AggregateChannel {
   count: Int!
 }
 
 type AggregateGuild {
+  count: Int!
+}
+
+type AggregateMessage {
   count: Int!
 }
 
@@ -526,10 +530,285 @@ Long can represent values between -(2^63) and 2^63 - 1.
 """
 scalar Long
 
+type Message {
+  content: String!
+  userId: String!
+  channelId: String!
+  guildId: String!
+}
+
+"""A connection to a list of items."""
+type MessageConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [MessageEdge]!
+  aggregate: AggregateMessage!
+}
+
+input MessageCreateInput {
+  content: String!
+  userId: String!
+  channelId: String!
+  guildId: String!
+}
+
+"""An edge in a connection."""
+type MessageEdge {
+  """The item at the end of the edge."""
+  node: Message!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum MessageOrderByInput {
+  content_ASC
+  content_DESC
+  userId_ASC
+  userId_DESC
+  channelId_ASC
+  channelId_DESC
+  guildId_ASC
+  guildId_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type MessagePreviousValues {
+  content: String!
+  userId: String!
+  channelId: String!
+  guildId: String!
+}
+
+type MessageSubscriptionPayload {
+  mutation: MutationType!
+  node: Message
+  updatedFields: [String!]
+  previousValues: MessagePreviousValues
+}
+
+input MessageSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [MessageSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [MessageSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [MessageSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: MessageWhereInput
+}
+
+input MessageUpdateManyMutationInput {
+  content: String
+  userId: String
+  channelId: String
+  guildId: String
+}
+
+input MessageWhereInput {
+  """Logical AND on all given filters."""
+  AND: [MessageWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [MessageWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [MessageWhereInput!]
+  content: String
+
+  """All values that are not equal to given value."""
+  content_not: String
+
+  """All values that are contained in given list."""
+  content_in: [String!]
+
+  """All values that are not contained in given list."""
+  content_not_in: [String!]
+
+  """All values less than the given value."""
+  content_lt: String
+
+  """All values less than or equal the given value."""
+  content_lte: String
+
+  """All values greater than the given value."""
+  content_gt: String
+
+  """All values greater than or equal the given value."""
+  content_gte: String
+
+  """All values containing the given string."""
+  content_contains: String
+
+  """All values not containing the given string."""
+  content_not_contains: String
+
+  """All values starting with the given string."""
+  content_starts_with: String
+
+  """All values not starting with the given string."""
+  content_not_starts_with: String
+
+  """All values ending with the given string."""
+  content_ends_with: String
+
+  """All values not ending with the given string."""
+  content_not_ends_with: String
+  userId: String
+
+  """All values that are not equal to given value."""
+  userId_not: String
+
+  """All values that are contained in given list."""
+  userId_in: [String!]
+
+  """All values that are not contained in given list."""
+  userId_not_in: [String!]
+
+  """All values less than the given value."""
+  userId_lt: String
+
+  """All values less than or equal the given value."""
+  userId_lte: String
+
+  """All values greater than the given value."""
+  userId_gt: String
+
+  """All values greater than or equal the given value."""
+  userId_gte: String
+
+  """All values containing the given string."""
+  userId_contains: String
+
+  """All values not containing the given string."""
+  userId_not_contains: String
+
+  """All values starting with the given string."""
+  userId_starts_with: String
+
+  """All values not starting with the given string."""
+  userId_not_starts_with: String
+
+  """All values ending with the given string."""
+  userId_ends_with: String
+
+  """All values not ending with the given string."""
+  userId_not_ends_with: String
+  channelId: String
+
+  """All values that are not equal to given value."""
+  channelId_not: String
+
+  """All values that are contained in given list."""
+  channelId_in: [String!]
+
+  """All values that are not contained in given list."""
+  channelId_not_in: [String!]
+
+  """All values less than the given value."""
+  channelId_lt: String
+
+  """All values less than or equal the given value."""
+  channelId_lte: String
+
+  """All values greater than the given value."""
+  channelId_gt: String
+
+  """All values greater than or equal the given value."""
+  channelId_gte: String
+
+  """All values containing the given string."""
+  channelId_contains: String
+
+  """All values not containing the given string."""
+  channelId_not_contains: String
+
+  """All values starting with the given string."""
+  channelId_starts_with: String
+
+  """All values not starting with the given string."""
+  channelId_not_starts_with: String
+
+  """All values ending with the given string."""
+  channelId_ends_with: String
+
+  """All values not ending with the given string."""
+  channelId_not_ends_with: String
+  guildId: String
+
+  """All values that are not equal to given value."""
+  guildId_not: String
+
+  """All values that are contained in given list."""
+  guildId_in: [String!]
+
+  """All values that are not contained in given list."""
+  guildId_not_in: [String!]
+
+  """All values less than the given value."""
+  guildId_lt: String
+
+  """All values less than or equal the given value."""
+  guildId_lte: String
+
+  """All values greater than the given value."""
+  guildId_gt: String
+
+  """All values greater than or equal the given value."""
+  guildId_gte: String
+
+  """All values containing the given string."""
+  guildId_contains: String
+
+  """All values not containing the given string."""
+  guildId_not_contains: String
+
+  """All values starting with the given string."""
+  guildId_starts_with: String
+
+  """All values not starting with the given string."""
+  guildId_not_starts_with: String
+
+  """All values ending with the given string."""
+  guildId_ends_with: String
+
+  """All values not ending with the given string."""
+  guildId_not_ends_with: String
+}
+
 type Mutation {
   createUser(data: UserCreateInput!): User!
   createGuild(data: GuildCreateInput!): Guild!
   createChannel(data: ChannelCreateInput!): Channel!
+  createMessage(data: MessageCreateInput!): Message!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateGuild(data: GuildUpdateInput!, where: GuildWhereUniqueInput!): Guild
   updateChannel(data: ChannelUpdateInput!, where: ChannelWhereUniqueInput!): Channel
@@ -542,9 +821,11 @@ type Mutation {
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyGuilds(data: GuildUpdateManyMutationInput!, where: GuildWhereInput): BatchPayload!
   updateManyChannels(data: ChannelUpdateManyMutationInput!, where: ChannelWhereInput): BatchPayload!
+  updateManyMessages(data: MessageUpdateManyMutationInput!, where: MessageWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyGuilds(where: GuildWhereInput): BatchPayload!
   deleteManyChannels(where: ChannelWhereInput): BatchPayload!
+  deleteManyMessages(where: MessageWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
 }
 
@@ -583,12 +864,14 @@ type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   guilds(where: GuildWhereInput, orderBy: GuildOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Guild]!
   channels(where: ChannelWhereInput, orderBy: ChannelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Channel]!
+  messages(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Message]!
   user(where: UserWhereUniqueInput!): User
   guild(where: GuildWhereUniqueInput!): Guild
   channel(where: ChannelWhereUniqueInput!): Channel
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   guildsConnection(where: GuildWhereInput, orderBy: GuildOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GuildConnection!
   channelsConnection(where: ChannelWhereInput, orderBy: ChannelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ChannelConnection!
+  messagesConnection(where: MessageWhereInput, orderBy: MessageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MessageConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -601,6 +884,7 @@ type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   guild(where: GuildSubscriptionWhereInput): GuildSubscriptionPayload
   channel(where: ChannelSubscriptionWhereInput): ChannelSubscriptionPayload
+  message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
 }
 
 type User {
