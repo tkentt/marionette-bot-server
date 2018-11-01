@@ -9,7 +9,8 @@ import Query from './resolvers/query';
 import Mutation from './resolvers/mutation';
 import authRouter from './router/auth-router';
 import discordStrategy from './passport/discord-strategy';
-import startClient from './bot';
+import startClient from './bot/start-client';
+import client from './bot/client';
 import authMiddleware from './resolvers/auth-middleware';
 
 // Setup Server
@@ -45,4 +46,4 @@ passport.use(discordStrategy);
 
 server.express.use('/auth', authRouter);
 
-startClient();
+startClient(client);

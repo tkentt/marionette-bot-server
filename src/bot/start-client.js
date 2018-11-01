@@ -1,11 +1,8 @@
 /* eslint-disable no-console */
-import Discord from 'discord.js';
-import prisma from './prisma';
-import { TOKEN } from './config';
+import prisma from '../prisma';
+import { TOKEN } from '../config';
 
-const client = new Discord.Client();
-
-const startClient = () => {
+const startClient = (client) => {
   client.login(TOKEN);
   client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -36,7 +33,6 @@ const upsertGuilds = async guilds => {
 
   return;
 };
-
 
 const upsertGuildChannels = async(guild, channels) => {
   for (let j=0; j<channels.length; j++) {
