@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Wed Oct 31 2018 23:03:12 GMT-0400 (Eastern Daylight Time)
+# timestamp: Thu Nov 01 2018 11:12:05 GMT-0400 (Eastern Daylight Time)
 
 type AggregateChannel {
   count: Int!
