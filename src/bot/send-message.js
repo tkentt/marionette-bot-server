@@ -1,4 +1,4 @@
-const sendMessage = async(client, channelId, message, guildId, userId) => {
+const sendMessage = async(client, channelId, message) => {
   const ready = client.readyAt;
   if (ready) {
     const channel = await client.channels.find(channel => {
