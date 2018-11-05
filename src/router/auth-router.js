@@ -13,7 +13,7 @@ router.get(
   passport.authenticate('discord'),
   (req, res) => {
     const token = createAuthToken(req.user);
-    res.redirect(`${CLIENT_ORIGIN}/auth?token=${token}`);
+    res.redirect(`${CLIENT_ORIGIN}?token=${token}`);
   }
 );
 
